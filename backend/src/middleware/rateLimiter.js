@@ -1,0 +1,20 @@
+import rateLimit from "../config/upstash.js";
+
+const rateLimiter = async(req,res,next) =>{
+
+   try{
+      const {success}= await rateLimit.limit("my-limit-key");
+        if(!success){
+            return res.status(429).json({
+                message:"Too many Requests, Please Try Again Later"
+            });
+        }
+        next();
+        
+   }
+   catch(error){
+     console.error("Error in rate limiter middleware:" , error)
+     next(error);
+   } 
+}
+export default rateLimiter;

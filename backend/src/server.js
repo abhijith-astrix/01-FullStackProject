@@ -3,6 +3,8 @@ import notesRoutes from "./routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
 import dns from "dns";
 import dotenv from "dotenv";
+import rateLimiter from "./middleware/rateLimiter.js";
+
 dotenv.config();
 
 
@@ -12,13 +14,15 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-connectDB();
 
-app.use(express.json());
+
+app.use(express.json()); //middleware to parse JSON request bodies
+app.use(rateLimiter); // Apply the rate limiting middleware to all routes
 
 app.use("/api/notes",notesRoutes);
 
-app.listen(PORT,() =>{
-
-    console.log(`Server is running on PORT: ${PORT}`);
-});
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on PORT: ${PORT}`);
+    });
+});// server starting without connecting to database is not good idea, so we connect to database first and then start the server
