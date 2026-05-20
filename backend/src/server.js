@@ -4,6 +4,7 @@ import { connectDB } from "./config/db.js";
 import dns from "dns";
 import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
+import cors from "cors";
 
 dotenv.config();
 
@@ -15,7 +16,9 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-
+app.use(cors({
+    origin: "http://localhost:5173", 
+}))
 app.use(express.json()); //middleware to parse JSON request bodies
 app.use(rateLimiter); // Apply the rate limiting middleware to all routes
 

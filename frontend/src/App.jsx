@@ -6,7 +6,7 @@ import NoteDetailPage from './pages/NoteDetailPage'
 const App = () => {
   return (
 
-    <div data-theme="synthwave" className="min-h-screen">
+    <div data-theme="dracula" className="min-h-screen">
 
       <Routes>
                  
